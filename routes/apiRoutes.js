@@ -1,18 +1,23 @@
 const Workout = require("../models/Workout");
 const Exercise = require("../models/Exercise");
-
-
-module.exports = (app) => {
-//get last workout 
-
+module.exports = function(app) {
+  
+// routes
 app.get('/api/workouts', (req, res)=> {
     Workout.find({}).populate("exercises")
         .then(workouts => {
-            res.send(workouts)
+             res.send(workouts);
         }).catch(err=> res.send(err));
 
 });
-//add exercise 
+//getWorkoutsInRange
+app.get('/api/workouts/range', (req, res)=> {
+    Workout.find({}).populate("exercises")
+        .then(wrkouts=> {
+            res.send(wrkouts)
+        }).catch(err=> res.send(err));
+});
+// //add exercise 
 app.post('/api/workouts/:id', (req, res)=> {
     Workout.findById(req.params.id)
         .then(workout=> {
@@ -26,13 +31,13 @@ app.post('/api/workouts/:id', (req, res)=> {
                 }
             })
         }).catch(err=> res.send(err));
-});
-//create workout
+}),
+// //create workout
 app.post('/api/workouts', (req, res)=> {
     Workout.create({date: req.body})
         .then(wrkout=> { 
             res.send(wrkout);
         }).catch(err=> res.send(err));
 });
-
-}
+ 
+  };
